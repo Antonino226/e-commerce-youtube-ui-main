@@ -1,0 +1,25 @@
+.footer {
+    background-color: #333; /* Colore di sfondo */
+    color: #fff; /* Colore del testo */
+    text-align: center; /* Allineamento del testo */
+    padding: 20px; /* Spaziatura interna */
+    position: relative; /* Impostazione di posizione */
+    bottom: 0; /* Fissare il footer in fondo */
+    width: 100%; /* Larghezza del footer */
+    font-family: Arial, sans-serif; /* Font del testo */
+}
+
+/* Stile del contenuto del footer */
+.footer-content {
+    max-width: 1200px; /* Larghezza massima del contenuto */
+    margin: 0 auto; /* Centrare il contenuto */
+    display: flex; /* Utilizzare Flexbox */
+    justify-content: center; /* Centrare orizzontalmente */
+    align-items: center; /* Centrare verticalmente */
+}
+
+/* Stile del testo del footer */
+.footer-text {
+    font-size: 16px; /* Dimensione del testo */
+    line-height: 1.5; /* Altezza della linea */
+}

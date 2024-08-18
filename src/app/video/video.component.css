@@ -1,0 +1,32 @@
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 90vh; /* Altezza del video personalizzabile */
+  overflow: hidden;
+}
+
+#background-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Assicura che il video copra tutto il contenitore */
+}
+
+.overlay-text {
+  position: absolute;
+    top: 50%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.overlay-text h1, .overlay-text h2 {
+  margin: 0;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.5); /* Sfondo semitrasparente per migliorare la leggibilità */
+  border-radius: 5px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Per migliorare la visibilità del testo */
+}

@@ -1,0 +1,42 @@
+<main>
+  <div class="search-container">
+    <label for="searchKey">Search any product</label>
+    <input type="text" id="searchKey" name="searchKey" placeholder="Search any product" (keyup)="searchByKeyword($event.target.value)">
+  </div>
+
+  <div class="actions-container">
+    <button *ngIf="selectedProducts.length > 0 && isAdmin()" class="delete-selected-btn" (click)="deleteSelectedProducts()">
+      <i class="fa fa-trash"></i> Delete Selected
+    </button>
+  </div>
+
+  <div class="grid-container">
+    <!-- Example of a product card. Repeat for each product -->
+    <div class="card" *ngFor="let p of productDetails">
+        <div class="card-header">
+            <img class="product-image" src="product-image-url.jpg" [src]="p.productImages[0]?.url" alt="{{ p.productName }}">
+        </div>
+        <div class="card-container">
+            <h2 class="card-title">{{ p.productName }}</h2>
+            <p class="card-subtitle">
+                <b>Rs. {{ p.productDiscountedPrice }}</b> &nbsp; <b class="original-price">{{ p.productActualPrice }}</b>
+            </p>
+            <div class="card-content">
+                <p class="product-description">{{ p.productDescription }}</p>
+            </div>
+            <div class="card-actions">
+                <button type="button" (click)="showProductDetails(p.productId)">View Details</button>
+                <input *ngIf="isAdmin()" type="checkbox" (change)="toggleProductSelection(p.productId, $event.target.checked)">
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="page-container">
+    <label>Page: {{ pageNumber }}</label>
+  </div>
+
+  <div *ngIf="showLoadButton" class="load-more-container">
+    <button type="button" (click)="loadMoreProduct()">Load more</button>
+  </div>
+</main>

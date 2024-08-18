@@ -1,0 +1,39 @@
+.header {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.space-buttons {
+    flex: 1 1 auto;
+}
+
+.buttons-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        height: auto;
+        padding: 10px;
+    }
+
+    .buttons-container {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .buttons-container button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .buttons-container button:last-child {
+        margin-bottom: 0;
+    }
+}

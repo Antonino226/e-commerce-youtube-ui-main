@@ -1,0 +1,78 @@
+<div class="form-container">
+  <div *ngIf="isLogin" class="custom-card" [@fadeSlideInOut]>
+    <div class="title">Login</div>
+    <button mat-raised-button color="accent" (click)="toggleForm()" class="toggle-button">
+      Create an account
+    </button>
+    <form #loginForm="ngForm" (ngSubmit)="login(loginForm)" class="custom-form">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Username</mat-label>
+        <input matInput ngModel name="userName" id="userName" placeholder="Username" required>
+        <mat-hint>Username</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" ngModel name="userPassword" id="userPassword" placeholder="Password" required>
+        <mat-hint>Password</mat-hint>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="w-100" type="submit">Login</button>
+    </form>
+  </div>
+
+  <div *ngIf="!isLogin" class="custom-card" [@fadeSlideInOut]>
+    <div class="title">Register</div>
+    <button mat-raised-button color="accent" (click)="toggleForm()" class="toggle-button">
+      Already have an account? Login
+    </button>
+    <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Username</mat-label>
+        <input matInput ngModel name="userName" id="userName" placeholder="Username">
+        <mat-hint>Username</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Firstname</mat-label>
+        <input matInput ngModel name="userFirstName" id="userFirstName" placeholder="Firstname">
+        <mat-hint>Firstname</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Lastname</mat-label>
+        <input matInput ngModel name="userLastName" id="userLastName" placeholder="Lastname">
+        <mat-hint>Lastname</mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" ngModel name="userPassword" id="userPassword" placeholder="Password">
+        <mat-hint>Password</mat-hint>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit">Register</button>
+    </form>
+  </div>
+</div>
+
+<div class="product-carousel">
+  <div class="card" *ngFor="let p of productDetails">
+    <div class="card-header">
+      <img class="product-image" [src]="p.productImages[0]?.url" alt="{{ p.productName }}">
+    </div>
+    <div class="card-container">
+      <h2 class="card-title">{{ p.productName }}</h2>
+      <p class="card-subtitle">
+        <b>Rs. {{ p.productDiscountedPrice }}</b> &nbsp; <b class="original-price">{{ p.productActualPrice }}</b>
+      </p>
+      <div class="card-content">
+        <p class="product-description">{{ p.productDescription }}</p>
+      </div>
+      <div class="card-actions">
+        <button type="button" (click)="showProductDetails(p.productId)">View Details</button>
+        <input *ngIf="isAdmin()" type="checkbox" (change)="toggleProductSelection(p.productId, $event.target.checked)">
+      </div>
+    </div>
+  </div>
+</div>

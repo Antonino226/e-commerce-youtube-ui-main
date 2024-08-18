@@ -1,0 +1,105 @@
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-6">
+            <div class="card image-container p-3">
+                <img [src]="product.productImages[selectedProductIndex].url" class="product-zoom-image">
+            </div>
+
+            <div class="mt-2">
+                <mat-grid-list cols="3" gutterSize="10" rowHeight="1:1">
+                    <mat-grid-tile *ngFor="let file of product.productImages; let i = index;" (click)="changeIndex(i)" style="border: 1px solid lightgrey; cursor: pointer;">
+                        <img [src]="file.url" height="100px" >
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </div>
+        </div>
+        <div class="col-6">
+            <div *ngIf="!edit" class="product-information">
+                <div class="mt-3">
+                    <h2>{{product.productName}}</h2>
+                </div>
+                <div class="mt-3">
+                    Description: <br>
+                    {{product.productDescription}}
+                </div>
+                <div class="mt-3">
+                    <b>Rs. {{product.productDiscountedPrice}}</b>&nbsp;&nbsp;<b style="text-decoration: line-through;">{{product.productActualPrice}}</b>
+                </div>
+                <div class="mt-5 text-center d-flex justify-content-center flex-wrap">
+                    <button mat-raised-button color="warn" style="width: 200px;" (click)="buyProduct(product.productId)"> Buy Now</button>
+                    &nbsp;
+                    <button mat-raised-button style="width: 200px;" (click)="addToCart(product.productId)">Add to Cart</button>
+                    &nbsp;
+                    <button *ngIf="isAdmin()" mat-raised-button color="primary" style="width: 200px;" (click)="edit=true">Edit</button>
+                </div>
+            </div>
+
+            <!-- Edit Mode -->
+            <div *ngIf="edit && isAdmin()" class="product-information">
+                <form #productForm="ngForm" (ngSubmit)="updateProduct()">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Product Name</mat-label>
+                        <input matInput type="text" placeholder="Product Name" [(ngModel)]="product.productName" name="productName" required>
+                    </mat-form-field>
+  
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Product Description</mat-label>
+                        <input matInput placeholder="Product Description" [(ngModel)]="product.productDescription" name="productDescription" required>
+                    </mat-form-field>
+  
+                    <!-- MENU A TENDINA PER LE CATEGORIE -->
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Category</mat-label>
+                        <mat-select [(ngModel)]="categoryId" name="category" required>
+                            <mat-option *ngFor="let category of categories" [value]="category.categoryId">
+                                {{ category.categoryName }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+  
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Product Actual Price</mat-label>
+                        <input matInput type="number" placeholder="Product Actual Price" [(ngModel)]="product.productActualPrice" name="productActualPrice" required>
+                    </mat-form-field>
+  
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Product Discounted Price</mat-label>
+                        <input matInput type="number" placeholder="Product Discounted Price" [(ngModel)]="product.productDiscountedPrice" name="productDiscountedPrice" required>
+                    </mat-form-field>
+  
+                    <div class="mt-5 text-center d-flex justify-content-center flex-wrap">
+                        <button mat-raised-button color="warn" style="width: 200px;" type="submit">Update</button>
+                        &nbsp;
+                        <button mat-raised-button (click)="cancelEdit()" style="width: 200px;">Cancel</button>
+                        <button mat-raised-button (click)="cancelEdit()" style="width: 200px;">TE</button>
+                    </div>
+                </form>
+            <div class="col-6">
+                <div>
+                    <div class="dropzone" appDrag (files)="fileDropped($event)">
+                        <div class="text-wrapper">
+                            <div class="centered">
+                                Drag and drop your file or
+                                <a (click)="selectFile.click()" class="browse-button">browse</a>
+                                a file
+                            </div>
+                        </div>
+                    </div>
+                    <input multiple type="file" style="display: none;" #selectFile (change)="onFileSelected($event)">
+                </div>
+                <div class="mt-5">
+                    <div class="row">
+                        <mat-grid-list cols="4" rowHeight="1:1">
+                            <mat-grid-tile *ngFor="let file of product.productImages; let i = index;">
+                                <div style="position: relative">
+                                    <span class="btn-remove-image" (click)="removeImages(i)">x</span>
+                                    <img [src]="file.url" width="100px" height="100px">
+                                </div>
+                            </mat-grid-tile>
+                        </mat-grid-list>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

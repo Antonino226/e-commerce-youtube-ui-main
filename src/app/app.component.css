@@ -1,0 +1,30 @@
+/* Fai in modo che il body e l'html riempiano l'intero viewport */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Struttura generale del layout */
+:host {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  height: 100%;
+}
+
+/* Contenuto principale deve riempire lo spazio disponibile */
+.content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Footer deve essere in fondo */
+app-footer {
+  height: 100px; /* Imposta l'altezza desiderata del footer */
+  background-color: #333; /* Colore di sfondo del footer */
+  color: #fff; /* Colore del testo del footer */
+  text-align: center;
+  padding: 1em;
+  width: 100%;
+    margin-top: auto;
+}

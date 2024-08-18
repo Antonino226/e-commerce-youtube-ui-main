@@ -1,0 +1,13 @@
+
+node_modules
+.DS_Store
+.DS_Store
+.DS_Store
+# Angular build cache
+.angular/
+
+# Cartella di build
+dist/
+
+# Node modules
+node_modules/

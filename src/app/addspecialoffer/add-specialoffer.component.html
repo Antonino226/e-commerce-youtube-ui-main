@@ -1,0 +1,40 @@
+<div class="container mt-5">
+  <div class="card p-2">
+    <div class="row">
+      <div class="col-6">
+        <form #specialOfferForm="ngForm" (ngSubmit)="addSpecialOffer(specialOfferForm)">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Offer Name</mat-label>
+            <input matInput type="text" placeholder="Offer Name" [(ngModel)]="specialOffer.offerName" name="offerName" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Offer Description</mat-label>
+            <input matInput placeholder="Offer Description" [(ngModel)]="specialOffer.offerDescription" name="offerDescription" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Select Product</mat-label>
+            <mat-select [(ngModel)]="selectedProduct" name="product" required>
+              <mat-option>
+                <ngx-mat-select-search [formControl]="productSearchControl"></ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let product of filteredProducts | async" [value]="product">
+                {{ product.productName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div align="end">
+            <button mat-stroked-button color="primary" style="margin-right: 3px;" type="button" (click)="specialOfferForm.reset()">Clear</button>
+            <button type="submit" mat-stroked-button color="primary">Add Special Offer</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="col-6">
+        <app-products></app-products>
+      </div>
+    </div>
+  </div>
+</div>

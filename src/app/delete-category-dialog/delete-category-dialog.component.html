@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>Delete Category</h1>
+<div mat-dialog-content>
+  <p>Do you want to delete the products associated with this category?</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button (click)="deleteWithoutProducts()">Delete Without Products</button>
+  <button mat-button (click)="deleteWithProducts()">Delete With Products</button>
+</div>

@@ -2,11 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Category } from '../_model/category.model';
 import { CategoryService } from '../_services/category.service';
 import { SafeUrl } from '@angular/platform-browser';
-import { ImageProcessingService } from '../image-processing.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import { UserAuthService } from '../_services/user-auth.service';
 import { MatDialog } from '@angular/material/dialog';
+import { UserAuthService } from '../_services/user-auth.service';
 import { DeleteCategoryDialogComponent } from '../delete-category-dialog/delete-category-dialog.component';
 
 @Component({
@@ -24,13 +22,14 @@ export class CategoryComponent implements OnInit, OnDestroy {
   showLoadButton = false;
   selectedCategories: number[] = [];
 
-  constructor(private categoryService: CategoryService,
-              private imageProcessingService: ImageProcessingService,
-              private userAuthService: UserAuthService,
-              public dialog: MatDialog) {}
+  constructor(
+    private categoryService: CategoryService,
+    private userAuthService: UserAuthService,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
-    this.getCategories();
+    this.loadCategories();
   }
 
   ngOnDestroy(): void {
@@ -39,21 +38,16 @@ export class CategoryComponent implements OnInit, OnDestroy {
     }
   }
 
-  private getCategories() {
-    this.categoryService.getCategories()
-      .pipe(
-        map((categories: Category[]) => categories.map(category => this.imageProcessingService.createImagesCategory(category)))
-      )
-      .subscribe(
-        (categories: Category[]) => {
-          this.categories = categories;
-          this.initializeImageRotation();
-          this.showLoadButton = categories.length === 12;
-        },
-        (error: HttpErrorResponse) => {
-          console.error('Error fetching products:', error);
-        }
-      );
+  loadCategories(): void {
+    this.categoryService.getCategories().subscribe(
+      (categories: Category[]) => {
+        this.categories = categories;
+        this.initializeImageRotation(); // Inizializza la rotazione delle immagini dopo il caricamento delle categorie
+      },
+      (error: HttpErrorResponse) => {
+        console.error('Errore nel recupero delle categorie', error);
+      }
+    );
   }
 
   private initializeImageRotation(): void {
@@ -62,7 +56,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
         this.currentImageIndexes[category.categoryId] = 0;
         this.imageIntervals[category.categoryId] = window.setInterval(() => {
           this.rotateImages(category.categoryId);
-        }, 5000); // Change image every 5 seconds
+        }, 5000); // Cambia immagine ogni 5 secondi
       }
     });
   }
@@ -76,10 +70,10 @@ export class CategoryComponent implements OnInit, OnDestroy {
 
   getCurrentImage(category: Category): SafeUrl {
     if (!category.categoryImages || category.categoryImages.length === 0) {
-      return 'src/assets/images/image_2.jpg'; // Default image if there are no images
+      return 'src/assets/images/image_2.jpg'; // Immagine predefinita
     }
     const index = this.currentImageIndexes[category.categoryId] || 0;
-    return category.categoryImages[index].url;
+    return category.categoryImages[index].url; // `url` è già di tipo SafeUrl
   }
 
   toggleCategorySelection(categoryId: number, isSelected: boolean) {
@@ -88,34 +82,29 @@ export class CategoryComponent implements OnInit, OnDestroy {
     } else {
       this.selectedCategories = this.selectedCategories.filter(id => id !== categoryId);
     }
-
   }
 
   deleteSelectedCategories() {
     this.selectedCategories.forEach(categoryId => {
-        const dialogRef = this.dialog.open(DeleteCategoryDialogComponent, {
-            width: '250px',
-            data: { categoryId }
-        });
+      const dialogRef = this.dialog.open(DeleteCategoryDialogComponent, {
+        width: '250px',
+        data: { categoryId }
+      });
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result !== undefined) {
-                this.categoryService.deleteCategories(categoryId, result.deleteProducts).subscribe(
-                    () => {
-                        this.selectedCategories = this.selectedCategories.filter(id => id !== categoryId);
-                        this.getCategories();
-                    },
-                    (error: HttpErrorResponse) => {
-                        console.error(`Error deleting category ${categoryId}:`, error);
-                    }
-                );
+      dialogRef.afterClosed().subscribe(result => {
+        if (result !== undefined) {
+          this.categoryService.deleteCategories(categoryId, result.deleteProducts).subscribe(
+            () => {
+              this.selectedCategories = this.selectedCategories.filter(id => id !== categoryId);
+              this.loadCategories();
+            },
+            (error: HttpErrorResponse) => {
+              console.error(`Errore nell'eliminazione della categoria ${categoryId}:`, error);
             }
-        });
+          );
+        }
+      });
     });
-}
-
-  deleteProductsByCategory(categoryId: number) {
-    // Implementa la logica per eliminare i prodotti associati alla categoria qui
   }
 
   isAdmin() {

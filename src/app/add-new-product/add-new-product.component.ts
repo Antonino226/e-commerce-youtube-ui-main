@@ -9,6 +9,7 @@ import { ProductService } from "../_services/product.service";
 import { CategoryService } from '../_services/category.service'; // Importa il servizio delle categorie
 import { Category } from '../_model/category.model'; // Importa il modello di categoria
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { catchError, Observable, of } from "rxjs";
 
 @Component({
   selector: "app-add-new-product",
@@ -21,6 +22,7 @@ export class AddNewProductComponent implements OnInit {
   page: number = 0;
   size: number = 10;
   totalPages: number = 0;
+  isLoading = false;
 
   product: Product = {
     productId: null,
@@ -33,11 +35,11 @@ export class AddNewProductComponent implements OnInit {
   };
 
   category: Category;
-  categoryId: number | null = null; // Aggiungi questa proprietà per tenere traccia dell'ID della categoria selezionata
+  categoryId: number | null = null;
 
   constructor(
     private productService: ProductService,
-    private categoryService: CategoryService, // Inietta il servizio delle categorie
+    private categoryService: CategoryService,
     private sanitizer: DomSanitizer,
     private activatedRoute: ActivatedRoute,
     private snackBar: MatSnackBar
@@ -50,42 +52,55 @@ export class AddNewProductComponent implements OnInit {
       this.isNewProduct = false;
     }
 
-    // Recupera le categorie
+    this.loadCategories();
+  }
+
+  loadCategories(): void {
     this.categoryService.getCategories().subscribe(
       (categories: Category[]) => {
         this.categories = categories;
       },
       (error: HttpErrorResponse) => {
-        
+        console.error('Errore nel recupero delle categorie', error);
       }
     );
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: HttpErrorResponse): Observable<T> => {
+      console.error(`${operation} failed: ${error.message}`);
+      return of(result as T);
+    };
   }
 
   addProduct(productForm: NgForm) {
-    // Prepare form data
-  const formData = this.prepareFormDataForProduct(this.product);
-
+    // Imposta isLoading su true per mostrare lo spinner
+    this.isLoading = true;
+  
+    const formData = this.prepareFormDataForProduct(this.product);
+  
     this.productService.addProduct(formData).subscribe(
       (response: Product) => {
         this.snackBar.open('Product created successfully!', 'Close', {
-          duration: 3000, // Duration in milliseconds
-          verticalPosition: 'top', // Position at the top
-          panelClass: ['custom-snackbar'] // Apply custom class
+          duration: 3000,
+          verticalPosition: 'top',
+          panelClass: ['custom-snackbar']
         });
         productForm.reset();
         this.product.productImages = [];
+        this.isLoading = false; // Nascondi lo spinner in caso di successo
       },
       (error: HttpErrorResponse) => {
-        
         this.snackBar.open('Failed to update category. Please try again.', 'Close', {
-          duration: 3000, // Duration in milliseconds
-          verticalPosition: 'top', // Position at the top
-          panelClass: ['custom-snackbar'] // Apply custom class
+          duration: 3000,
+          verticalPosition: 'top',
+          panelClass: ['custom-snackbar']
         });
+        this.isLoading = false; // Nascondi lo spinner anche in caso di errore
       }
     );
   }
-
+  
   prepareFormDataForProduct(product: Product): FormData {
     const uploadImageData = new FormData();
     uploadImageData.append(
@@ -130,4 +145,21 @@ export class AddNewProductComponent implements OnInit {
   fileDropped(fileHandle: FileHandle) {
     this.product.productImages.push(fileHandle);
   }
+
+  normalizePrice(event: any, fieldName: string) {
+    let inputValue = event.target.value;
+    
+    // Sostituisci la virgola con il punto
+    inputValue = inputValue.replace(',', '.');
+    
+    // Converti in un numero se valido e aggiorna il campo corretto
+    const parsedValue = parseFloat(inputValue);
+    
+    if (!isNaN(parsedValue)) {
+      this.product[fieldName] = parsedValue;
+    } else {
+      this.product[fieldName] = inputValue;  // Lascia l'input come stringa se non è un numero valido
+    }
+  }
+  
 }

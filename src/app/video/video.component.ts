@@ -9,36 +9,37 @@ import { SpecialOffer } from '../_model/specialoffer';
 })
 export class VideoComponent implements OnInit {
 
-  // Video paths
   videos: string[] = [
     'assets/videos/background1.mp4',
     'assets/videos/background2.mp4',
     'assets/videos/background3.mp4',
-    // Add more video paths if necessary
   ];
 
   specialOffers: SpecialOffer[] = [];
   currentOfferIndex = 0;
-  offerDisplayDuration = 10000; // Display each offer for 10 seconds
+  offerDisplayDuration = 10000; // 10 seconds
+
+  isLoading = true; // Spinner control
+  currentVideoIndex = 0;
+  intervalTime = 60000; // Change video every 60 seconds
 
   constructor(private specialOfferService: SpecialOfferService) { }
 
   ngOnInit(): void {
-    // Set an interval to change the video every intervalTime milliseconds
-    setInterval(this.changeVideo.bind(this), this.intervalTime);
-
     // Fetch special offers on component initialization
     this.specialOfferService.getSpecialOffers().subscribe(offers => {
       this.specialOffers = offers;
-      // Start cycling through offers if any exist
       if (this.specialOffers.length > 0) {
         setInterval(this.changeOffer.bind(this), this.offerDisplayDuration);
       }
     });
+
+    setInterval(this.changeVideo.bind(this), this.intervalTime);
   }
 
-  // Function to change the video
+  // Change video function
   changeVideo() {
+    this.isLoading = true; // Show spinner when video changes
     const videoElement = document.getElementById('background-video') as HTMLVideoElement;
     const sourceElement = document.getElementById('video-source') as HTMLSourceElement;
 
@@ -47,24 +48,31 @@ export class VideoComponent implements OnInit {
     this.currentVideoIndex = (this.currentVideoIndex + 1) % this.videos.length;
   }
 
-  // Function to change the current offer
-  changeOffer() {
-    this.currentOfferIndex = (this.currentOfferIndex + 1) % this.specialOffers.length;
+  // Handle when the video is fully buffered and can be played
+  onVideoCanPlay() {
+    const videoElement = document.getElementById('background-video') as HTMLVideoElement;
+    this.isLoading = false; // Hide spinner when video is fully loaded
+    videoElement.play(); // Start video playback
   }
 
-  // Interval time to change the video (in milliseconds)
-  intervalTime = 60000; // Every minute for test, change to 3600000 for every hour
+  // Handle video loading errors
+  onVideoError() {
+    console.error("Error loading video");
+    this.isLoading = false; // Hide spinner if there's an error
+  }
 
-  // Current video index
-  currentVideoIndex = 0;
+  // Handle waiting for video to load
+  onVideoWaiting() {
+    this.isLoading = true; // Show spinner while the video buffers
+  }
 
-  // Handle video end event
-  handleVideoEnded() {
-    this.changeVideo();
+  // Change offer function
+  changeOffer() {
+    this.currentOfferIndex = (this.currentOfferIndex + 1) % this.specialOffers.length;
   }
 
   get currentOffer(): SpecialOffer {
     return this.specialOffers[this.currentOfferIndex];
   }
-  
+
 }

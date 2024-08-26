@@ -1,16 +1,19 @@
 import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../_auth/auth.guard';
 import { AddCategoryComponent } from '../add-category/add-category.component';
 import { CategoryListComponent } from '../category-list/category-list.component';
 import { CategoryResolveService } from '../category-resolve.service';
+import { SharedModule } from '../shared.module';
 
 
 const routes: Routes = [
   {
     path: 'category/:name',
-    component: CategoryListComponent
+    component: CategoryListComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['Admin','User'] },
   },
   {
     path: 'addCategory',
@@ -22,9 +25,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [CategoryListComponent, AddCategoryComponent],
+  declarations: [
+    CategoryListComponent,
+    AddCategoryComponent
+  ],
   imports: [
     CommonModule,
+    SharedModule,
     RouterModule.forChild(routes)
   ]
 })

@@ -1,8 +1,13 @@
 <app-video></app-video>
-<div class="custom-home">
-  <div class="content">  
-      <app-category></app-category>      
-      <app-products></app-products>
-      <app-location></app-location>
+<div class="custom-home" (scroll)="handleScroll($event)">
+  <div class="content">
+    <a id="category"></a>
+    <app-category></app-category>
+    
+    <a id="products"></a>
+    <app-products [pageSize]="12"></app-products>
+    
+    <a id="location"></a>
+    <app-location></app-location>
   </div>
 </div>

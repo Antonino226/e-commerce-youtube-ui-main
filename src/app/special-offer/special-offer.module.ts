@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { AuthGuard } from '../_auth/auth.guard';
-import { SpecialOfferresolveService } from '../special-offerresolve.service';
 import { AddSpecialOfferComponent } from '../addspecialoffer/add-specialoffer.component';
+import { SpecialOfferresolveService } from '../special-offerresolve.service';
+import { SharedModule } from '../shared.module';
+import { ProductModule } from '../products/product.module';
 
 const routes: Routes = [
   {
@@ -16,9 +18,13 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AddSpecialOfferComponent],
+  declarations: [
+    AddSpecialOfferComponent
+  ],
   imports: [
     CommonModule,
+    SharedModule,
+    ProductModule,
     RouterModule.forChild(routes)
   ]
 })

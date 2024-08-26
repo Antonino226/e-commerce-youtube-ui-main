@@ -2,8 +2,8 @@
   <div class="category-title">Categories</div>
 
   <div class="actions-container">
-    <button *ngIf="selectedCategories.length > 0 && isAdmin()" class="delete-selected-btn" (click)="deleteSelectedCategories()">
-      <i class="fa fa-trash"></i> Delete Selected
+    <button type="button" *ngIf="selectedCategories.length > 0 && isAdmin()" class="btn btn-danger" (click)="deleteSelectedCategories()">
+      Delete Selected
     </button>
   </div>
 

@@ -7,7 +7,6 @@ import { Product } from "../_model/product.model";
 import { ProductService } from "../_services/product.service";
 import { FormControl } from "@angular/forms";
 import { Observable } from "rxjs";
-import { startWith, map } from "rxjs/operators";
 import { SpecialOffer } from "../_model/specialoffer";
 import { SpecialOfferService } from "../_services/specialoffer.service";
 

@@ -1,8 +1,13 @@
 <div class="video-container">
-  <video id="background-video" autoplay muted loop>
-    <source id="video-source" src="assets/videos/background1.mp4" type="video/mp4">
+  <div *ngIf="isLoading" class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <video id="background-video" muted loop (canplaythrough)="onVideoCanPlay()" (error)="onVideoError()" (waiting)="onVideoWaiting()">
+    <source id="video-source" [src]="videos[currentVideoIndex]" type="video/mp4">
     Your browser does not support the video tag.
   </video>
+
   <div class="overlay-text" *ngIf="specialOffers.length > 0">
     <div>
       <h2>{{ currentOffer.offerName }}</h2>

@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserAuthService } from '../_services/user-auth.service';
 import { UserService } from '../_services/user.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Category } from '../_model/category.model';
+import { CategoryService } from '../_services/category.service';
 
 @Component({
   selector: 'app-header',
@@ -9,13 +12,31 @@ import { UserService } from '../_services/user.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
+
+  categories: Category[] = [];
+  category: Category;
+  
   constructor(
     private userAuthService: UserAuthService,
     private router: Router,
-    public userService: UserService
+    public userService: UserService,
+    private categoryService: CategoryService,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.loadCategories();
+  }
+
+  loadCategories(): void {
+    this.categoryService.getCategories().subscribe(
+      (categories: Category[]) => {
+        this.categories = categories;
+      },
+      (error: HttpErrorResponse) => {
+        console.error('Errore nel recupero delle categorie', error);
+      }
+    );
+  }
 
   public isLoggedIn() {
     return this.userAuthService.isLoggedIn();
@@ -32,6 +53,10 @@ export class HeaderComponent implements OnInit {
 
   public isUser() {
     return this.userAuthService.isUser();
+  }
+
+  public navigateTo(fragment: string) {
+    this.router.navigate([], { fragment });
   }
 
 }

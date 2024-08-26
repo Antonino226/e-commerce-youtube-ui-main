@@ -1,92 +1,33 @@
-import {
-  Component,
-  ComponentFactoryResolver,
-  ViewChild,
-  ViewContainerRef,
-  Compiler,
-} from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
-  @ViewChild('categoryContainer', { read: ViewContainerRef })
-  categoryContainer: ViewContainerRef;
-  @ViewChild('productsContainer', { read: ViewContainerRef })
-  productsContainer: ViewContainerRef;
-  @ViewChild('locationContainer', { read: ViewContainerRef })
-  locationContainer: ViewContainerRef;
+export class HomeComponent implements OnInit {
 
-  public categoryRendered = false;
-  public productsRendered = false;
-  public locationRendered = false;
+  constructor(private router: Router) {}
 
-  constructor(
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private compiler: Compiler
-  ) {}
+  ngOnInit() {}
 
-  public handleScroll(event) {
-    const scrollPosition =
-      event.target.scrollTop + event.target.clientHeight + 50;
-
-    const categoryContainerPos =
-      this.categoryContainer.element.nativeElement.offsetTop;
-    if (!this.categoryRendered && scrollPosition >= categoryContainerPos) {
-      this.categoryRendered = true;
-      this.loadCategoryContainer();
+  @HostListener('window:scroll', ['$event'])
+  public handleScroll(event: Event) {
+    const scrollPosition = window.scrollY + window.innerHeight;
+    
+    // Define the positions of the sections
+    const categoryPos = document.getElementById('category').offsetTop;
+    const productsPos = document.getElementById('products').offsetTop;
+    const locationPos = document.getElementById('location').offsetTop;
+    
+    // Update the URL fragment based on scroll position
+    if (scrollPosition >= locationPos) {
+      this.router.navigate([], { fragment: 'location' });
+    } else if (scrollPosition >= productsPos) {
+      this.router.navigate([], { fragment: 'products' });
+    } else if (scrollPosition >= categoryPos) {
+      this.router.navigate([], { fragment: 'category' });
     }
-
-    const productsContainerPos =
-      this.productsContainer.element.nativeElement.offsetTop;
-    if (!this.productsRendered && scrollPosition >= productsContainerPos) {
-      this.productsRendered = true;
-      this.loadProductsContainer();
-    }
-
-    const locationContainerPos =
-      this.locationContainer.element.nativeElement.offsetTop;
-    if (!this.locationRendered && scrollPosition >= locationContainerPos) {
-      this.locationRendered = true;
-      this.loadLocationContainer();
-    }
-  }
-
-  private loadCategoryContainer() {
-    import('../category/category.component').then(
-      ({ CategoryComponent }) => {
-        const componentFactory =
-          this.componentFactoryResolver.resolveComponentFactory(
-            CategoryComponent
-          );
-        const { instance } = this.categoryContainer.createComponent(componentFactory);
-      }
-    );
-  }
-
-  private loadProductsContainer() {
-    import('../products/products.component').then(
-      ({ ProductsComponent }) => {
-        const componentFactory =
-          this.componentFactoryResolver.resolveComponentFactory(
-            ProductsComponent
-          );
-        const { instance } = this.productsContainer.createComponent(componentFactory);
-      }
-    );
-  }
-
-  private loadLocationContainer() {
-    import('../location/location.component').then(
-      ({ LocationComponent }) => {
-        const componentFactory =
-          this.componentFactoryResolver.resolveComponentFactory(
-            LocationComponent
-          );
-        const { instance } = this.locationContainer.createComponent(componentFactory);
-      }
-    );
   }
 }

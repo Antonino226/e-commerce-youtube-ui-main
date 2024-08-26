@@ -5,7 +5,7 @@ import { UserAuthService } from '../_services/user-auth.service';
 import { UserService } from '../_services/user.service';
 import { trigger, state, style, transition, animate, query, stagger } from '@angular/animations';
 import { HttpErrorResponse } from '@angular/common/http';
-import { map } from 'rxjs';
+import { interval, map } from 'rxjs';
 import { Product } from '../_model/product.model';
 import { ProductService } from '../_services/product.service';
 import { ImageProcessingService } from '../image-processing.service';
@@ -15,27 +15,11 @@ import { ImageProcessingService } from '../image-processing.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   animations: [
-    trigger('fadeSlideInOut', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(-20px)' }),
-        animate('500ms ease-in', style({ opacity: 1, transform: 'translateY(0)' }))
-      ]),
-      transition(':leave', [
-        animate('500ms ease-out', style({ opacity: 0, transform: 'translateY(-20px)' }))
-      ])
-    ]),
-    trigger('listAnimation', [
-      transition('* <=> *', [
-        query(':enter', [
-          style({ opacity: 0, transform: 'translateY(-15px)' }),
-          stagger('50ms', [
-            animate('500ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-          ])
-        ], { optional: true }),
-        query(':leave', [
-          animate('500ms', style({ opacity: 0, transform: 'translateY(-15px)' }))
-        ], { optional: true })
-      ])
+    trigger('fade', [ 
+      transition('void => *', [
+        style({ opacity: 0 }), 
+        animate(500, style({opacity: 1}))
+      ]) 
     ])
   ]
 })
@@ -48,6 +32,12 @@ export class LoginComponent implements OnInit {
   selectedProducts: number[] = [];
   showLoadButton = false;
   
+  activeIndex = 0;
+  activePageIndex = 0;
+  pageSize = 5;  // Products per page
+  autoScrollInterval: any;
+  paginatedProductDetails: Product[][] = [];
+
   constructor(
     private userService: UserService,
     private productService: ProductService,
@@ -98,7 +88,7 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['/register']);
   }
 
-  getRandomProducts(count: number = 5) {
+  getRandomProducts(count: number = 10) {
     this.productService.getRandomProducts(count)
       .pipe(
         map((products: Product[]) => products.map(product => this.imageProcessingService.createImagesProduct(product)))
@@ -112,4 +102,39 @@ export class LoginComponent implements OnInit {
         }
       );
   }
+
+  paginateProducts() {
+    for (let i = 0; i < this.productDetails.length; i += this.pageSize) {
+      this.paginatedProductDetails.push(this.productDetails.slice(i, i + this.pageSize));
+    }
+  }
+
+  startAutoScroll() {
+    this.autoScrollInterval = interval(3000).subscribe(() => {
+      this.nextProduct();
+    });
+  }
+
+  nextProduct() {
+    this.activeIndex = (this.activeIndex + 1) % this.pageSize;
+    if (this.activeIndex === 0) {
+      this.nextPage();
+    }
+  }
+
+  nextPage() {
+    this.activePageIndex = (this.activePageIndex + 1) % this.paginatedProductDetails.length;
+  }
+
+  setPage(index: number) {
+    this.activePageIndex = index;
+    this.activeIndex = 0;
+  }
+
+  ngOnDestroy() {
+    if (this.autoScrollInterval) {
+      this.autoScrollInterval.unsubscribe();
+    }
+  }
+  
 }

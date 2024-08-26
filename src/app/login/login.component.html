@@ -1,5 +1,5 @@
 <div class="form-container">
-  <div *ngIf="isLogin" class="custom-card" [@fadeSlideInOut]>
+  <div *ngIf="isLogin" class="custom-card" @fade>
     <div class="title">Login</div>
     <button mat-raised-button color="accent" (click)="toggleForm()" class="toggle-button">
       Create an account
@@ -21,7 +21,7 @@
     </form>
   </div>
 
-  <div *ngIf="!isLogin" class="custom-card" [@fadeSlideInOut]>
+  <div *ngIf="!isLogin" class="custom-card" @fade>
     <div class="title">Register</div>
     <button mat-raised-button color="accent" (click)="toggleForm()" class="toggle-button">
       Already have an account? Login
@@ -56,6 +56,10 @@
   </div>
 </div>
 
+<div style="padding-left: 20px;margin: 0;">
+  <h2>Accedi ed esplora i nostri prodotti più popolari</h2>
+</div>
+
 <div class="product-carousel">
   <div class="card" *ngFor="let p of productDetails">
     <div class="card-header">
@@ -68,10 +72,6 @@
       </p>
       <div class="card-content">
         <p class="product-description">{{ p.productDescription }}</p>
-      </div>
-      <div class="card-actions">
-        <button type="button" (click)="showProductDetails(p.productId)">View Details</button>
-        <input *ngIf="isAdmin()" type="checkbox" (change)="toggleProductSelection(p.productId, $event.target.checked)">
       </div>
     </div>
   </div>

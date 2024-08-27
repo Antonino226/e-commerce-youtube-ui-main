@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { UserAuthService } from '../_services/user-auth.service';
 import { DeleteCategoryDialogComponent } from '../delete-category-dialog/delete-category-dialog.component';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-category',
@@ -84,26 +85,45 @@ export class CategoryComponent implements OnInit, OnDestroy {
     }
   }
 
-  deleteSelectedCategories() {
-    this.selectedCategories.forEach(categoryId => {
-      const dialogRef = this.dialog.open(DeleteCategoryDialogComponent, {
-        width: '250px',
-        data: { categoryId }
-      });
+  toggleSelectAll(isSelected: boolean) {
+    if (isSelected) {
+      this.selectedCategories = this.categories.map(category => category.categoryId);
+    } else {
+      this.selectedCategories = [];
+    }
+  }
 
-      dialogRef.afterClosed().subscribe(result => {
-        if (result !== undefined) {
-          this.categoryService.deleteCategories(categoryId, result.deleteProducts).subscribe(
-            () => {
-              this.selectedCategories = this.selectedCategories.filter(id => id !== categoryId);
-              this.loadCategories();
-            },
-            (error: HttpErrorResponse) => {
-              console.error(`Errore nell'eliminazione della categoria ${categoryId}:`, error);
-            }
-          );
-        }
-      });
+  isCategorySelected(categoryId: number): boolean {
+    return this.selectedCategories.includes(categoryId);
+  }
+
+  deleteSelectedCategories() {
+    // Open the confirmation dialog once for all selected categories
+    const dialogRef = this.dialog.open(DeleteCategoryDialogComponent, {
+      width: '500px',
+      data: { categoryIds: this.selectedCategories } // Pass the list of selected category IDs
+    });
+  
+    // Handle the result when the dialog is closed
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        // Perform deletion for all selected categories at once
+        const deleteObservables = this.selectedCategories.map(categoryId => 
+          this.categoryService.deleteCategories(categoryId, result.deleteProducts)
+        );
+  
+        // Use forkJoin to wait for all deletion operations to complete
+        forkJoin(deleteObservables).subscribe(
+          () => {
+            // Once all deletions are successful, clear the selected categories and reload them
+            this.selectedCategories = [];
+            this.loadCategories();
+          },
+          (error: HttpErrorResponse) => {
+            console.error('Errore nell\'eliminazione delle categorie:', error);
+          }
+        );
+      }
     });
   }
 

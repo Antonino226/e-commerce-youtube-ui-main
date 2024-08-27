@@ -11,14 +11,14 @@
   </div>
 
   <!-- Contenitore delle azioni (solo per amministratori) -->
-  <div class="actions-container">
-    <div class="select-all-container" *ngIf="isAdmin()">
+  <div class="actions-container" *ngIf="isAdmin()">
+    <div class="select-all-container">
       <input type="checkbox" id="selectAll" (change)="toggleSelectAll($event.target.checked)">
       <label for="selectAll">Select All</label>
     </div>
     <button 
       type="button" 
-      *ngIf="selectedProducts.length > 0 && isAdmin()" 
+      *ngIf="selectedProducts.length > 0"
       class="btn btn-danger" 
       (click)="deleteSelectedProducts()">
       Delete Selected

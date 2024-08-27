@@ -15,6 +15,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 })
 export class AddCategoryComponent implements OnInit {
   isNewCategory = true;
+  loading: boolean = false;  // Aggiunta variabile per lo stato di caricamento
 
   category: Category = {
     categoryId: null,
@@ -39,25 +40,49 @@ export class AddCategoryComponent implements OnInit {
   }
 
   addCategory(categoryForm: NgForm) {
-    const formData = this.prepareFormDataForCategory(this.category);
-  
-    this.categoryService.addNewCategory(formData).subscribe(
-      (response: Category) => {
-        categoryForm.reset();
-        this.category.categoryImages = [];
-        this.snackBar.open('Category created successfully!', 'Close', {
-          duration: 3000, // Duration in milliseconds
-        });
+    this.loading = true; // Attiva l'indicatore di caricamento
+    // Verifica se esiste già una categoria con lo stesso nome
+    this.categoryService.getCategories().subscribe(
+      (categories: Category[]) => {
+        const duplicateCategory = categories.find(cat => 
+          cat.categoryName.toLowerCase() === this.category.categoryName.toLowerCase()
+        );
+
+        if (duplicateCategory && this.isNewCategory) {
+          this.snackBar.open('Category name already exists!', 'Close', {
+            duration: 3000,
+          });
+          this.loading = false; // Disattiva l'indicatore di caricamento in caso di duplicato
+        } else {
+          // Procedi con l'aggiunta della categoria
+          const formData = this.prepareFormDataForCategory(this.category);
+          this.categoryService.addNewCategory(formData).subscribe(
+            (response: Category) => {
+              categoryForm.reset();
+              this.category.categoryImages = [];
+              this.snackBar.open('Category created successfully!', 'Close', {
+                duration: 3000,
+              });
+              this.loading = false; // Disattiva l'indicatore di caricamento in caso di successo
+            },
+            (error: HttpErrorResponse) => {
+              this.snackBar.open('Failed to create category. Please try again.', 'Close', {
+                duration: 3000,
+              });
+              this.loading = false; // Disattiva l'indicatore di caricamento in caso di errore
+            }
+          );
+        }
       },
       (error: HttpErrorResponse) => {
-        
-        this.snackBar.open('Failed to update category. Please try again.', 'Close', {
+        this.snackBar.open('Failed to fetch categories. Please try again.', 'Close', {
           duration: 3000,
         });
+        this.loading = false; // Disattiva l'indicatore di caricamento in caso di errore
       }
     );
   }
-
+  
   prepareFormDataForCategory(category: Category): FormData {
     const uploadImageData = new FormData();
     uploadImageData.append(

@@ -32,7 +32,7 @@ import {MatDividerModule} from '@angular/material/divider';
     MatToolbarModule,
     MatProgressSpinnerModule,
     MatMenuModule,
-    MatDividerModule
+    MatDividerModule,
   ],
   exports: [
     CommonModule,

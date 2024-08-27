@@ -9,6 +9,7 @@ import { VideoComponent } from '../video/video.component';
 import { ProductModule } from "../products/product.module";
 import { LocationComponent } from '../location/location.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CategoryModule } from '../category/category.module';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     CommonModule,
     HomeRoutingModule,
     ProductModule,
+    CategoryModule,
     MatProgressSpinnerModule
 ]
 })

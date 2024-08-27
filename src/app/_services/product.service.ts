@@ -69,10 +69,15 @@ export class ProductService {
     return this.httpClient.get(`${this.baseUrl}/getCartDetails`);
   }
 
-  public getProductsByCategory(categoryName: string): Observable<any> {
-    return this.httpClient.get(`${this.baseUrl}/categories/${categoryName}`);
-  }
-
+  public getProductsByCategory(categoryName: string, pageNumber: number, pageSize: number, searchKey: string = ""): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/getProductsByCategory/${categoryName}`, {
+        params: {
+            pageNumber: pageNumber.toString(),
+            pageSize: pageSize.toString(),
+            searchKey: searchKey
+        }
+    });
+}
   public getRandomProducts(count: number): Observable<Product[]> {
     return this.httpClient.get<Product[]>(`${this.baseUrl}/getRandomProducts?count=${count}`);
   }

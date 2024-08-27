@@ -5,41 +5,36 @@
 
   <span class="spacer"></span>
 
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item [routerLink]="['/products']">Products</button>
-    <mat-divider></mat-divider>
-    <button mat-menu-item *ngFor="let category of categories" [routerLink]="['/category', category.categoryName]">
-      {{ category.categoryName }}
-    </button>
-  </mat-menu>
-
-  <button mat-button [matMenuTriggerFor]="menu">Menu</button>
-
-  <span class="space-buttons"></span>
-  
   <ng-container *ngIf="isLoggedIn()">
-    <button mat-raised-button color="primary" routerLink="/">Home</button>
-    <button *ngIf="!isAdmin()" mat-raised-button color="primary" (click)="navigateTo('category')">Category</button>
-    <button *ngIf="!isAdmin()" mat-raised-button color="primary" (click)="navigateTo('products')">Products</button>
-    <button *ngIf="!isAdmin()" mat-raised-button color="primary" (click)="navigateTo('location')">Location</button>
-    <ng-container *ngIf="!isAdmin()">
-      <button mat-raised-button color="primary" routerLink="/cart">Cart</button>
-      <button mat-raised-button color="primary" routerLink="/myOrders">My Orders</button>
-    </ng-container>
-    <ng-container *ngIf="isAdmin()">
-      <button mat-raised-button color="primary" routerLink="/addNewProduct">Add New Product</button>
-      <button mat-raised-button color="primary" routerLink="/addCategory">Add New Category</button>
-      <button mat-raised-button color="primary" routerLink="/addSpecialoffer">Add Special Offer</button>
-      <button mat-raised-button color="primary" routerLink="/orderInformation">Order Information</button>
-    </ng-container>
-  </ng-container>
-  
-  <ng-container *ngIf="!isLoggedIn()">
-    <button mat-raised-button color="primary" routerLink="/">Home</button>
-    <button mat-raised-button color="primary" routerLink="/login">Login</button>
-  </ng-container>
+    <span class="space-buttons"></span>
 
-  <button *ngIf="isLoggedIn()" (click)="logout()" mat-raised-button color="warn">
-    Logout
-  </button>
+    <div style="display: flex;gap: 5px;">
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item color="primary" routerLink="/">Home</button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item [routerLink]="['/products']">All Products</button>
+        <button mat-menu-item [routerLink]="['/category']">Categories</button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item color="primary" routerLink="/cart">Cart</button>
+        <button mat-menu-item color="primary" routerLink="/myOrders">My Orders</button>
+        <mat-divider></mat-divider>
+        <button *ngIf="!isAdmin()" mat-menu-item color="primary" (click)="navigateTo('location')">Location</button>
+      </mat-menu>
+      <button mat-raised-button [matMenuTriggerFor]="menu">Menu</button>
+
+      <ng-container *ngIf="isAdmin()">
+        <mat-menu #adminMenu="matMenu">
+          <button mat-menu-item routerLink="/addNewProduct">Add New Product</button>
+          <button mat-menu-item routerLink="/addCategory">Add New Category</button>
+          <button mat-menu-item routerLink="/addSpecialoffer">Add Special Offer</button>
+          <button mat-menu-item routerLink="/orderInformation">Order Information</button>
+        </mat-menu>
+        <button mat-raised-button [matMenuTriggerFor]="adminMenu">Admin</button>
+      </ng-container>
+
+        <button (click)="logout()" mat-raised-button color="warn">
+          Logout
+        </button>
+    </div>
+  </ng-container>
 </mat-toolbar>

@@ -1,21 +1,34 @@
 <div class="category-container">
   <div class="category-title">Categories</div>
 
-  <div class="actions-container">
-    <button type="button" *ngIf="selectedCategories.length > 0 && isAdmin()" class="btn btn-danger" (click)="deleteSelectedCategories()">
+  <div class="actions-container" *ngIf="isAdmin()">
+    <div class="select-all-container">
+      <input type="checkbox" id="selectAll" (change)="toggleSelectAll($event.target.checked)">
+      <label for="selectAll">Select All</label>
+    </div>
+    <button 
+    type="button" 
+    *ngIf="selectedCategories.length > 0" 
+    class="btn btn-danger" 
+    (click)="deleteSelectedCategories()">
       Delete Selected
     </button>
   </div>
 
   <div class="card-grid">
     <div class="category-card" *ngFor="let category of categories">
-      <img class="category-image" [src]="getCurrentImage(category)" alt="{{ category.categoryName }}" [routerLink]="['/category', category.categoryName]">
+      <a [routerLink]="['/category', category.categoryName]">
+        <img class="category-image" [src]="getCurrentImage(category)" alt="{{ category.categoryName }}">
+      </a>
       <div class="category-details" [routerLink]="['/category', category.categoryName]">
         <div class="category-name">{{ category.categoryName }}</div>
         <div class="category-description">{{ category.categoryDescription }}</div>
       </div>
       <div *ngIf="isAdmin()" >
-        <input type="checkbox" (change)="toggleCategorySelection(category.categoryId, $event.target.checked)">
+        <input 
+        type="checkbox" 
+        [checked]="isCategorySelected(category.categoryId)" 
+        (change)="toggleCategorySelection(category.categoryId, $event.target.checked)">
       </div>
     </div>
   </div>

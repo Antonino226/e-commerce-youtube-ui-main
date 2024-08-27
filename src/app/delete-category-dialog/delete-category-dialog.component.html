@@ -1,9 +1,13 @@
-<h1 mat-dialog-title>Delete Category</h1>
-<div mat-dialog-content>
-  <p>Do you want to delete the products associated with this category?</p>
-</div>
-<div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button (click)="deleteWithoutProducts()">Delete Without Products</button>
-  <button mat-button (click)="deleteWithProducts()">Delete With Products</button>
-</div>
+<mat-card class="example-card" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Delete Category</mat-card-title>
+    <mat-card-subtitle>Do you want to delete the products associated with this category?</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div mat-dialog-actions>
+      <button class="btn btn-danger" (click)="onNoClick()">Cancel</button>
+      <button mat-raised-button (click)="deleteWithoutProducts()">Delete Without Products</button>
+      <button mat-raised-button (click)="deleteWithProducts()">Delete With Products</button>
+    </div>
+  </mat-card-content>
+</mat-card>

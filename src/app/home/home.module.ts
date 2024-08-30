@@ -10,13 +10,15 @@ import { ProductModule } from "../products/product.module";
 import { LocationComponent } from '../location/location.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CategoryModule } from '../category/category.module';
+import { CartComponent } from '../cart/cart.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     CategoryComponent,
     VideoComponent,
-    LocationComponent
+    LocationComponent,
+    CartComponent
   ],
   imports: [
     CommonModule,

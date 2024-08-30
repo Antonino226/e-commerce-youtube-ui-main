@@ -50,7 +50,8 @@ export class AddSpecialOfferComponent implements OnInit {
         productDescription: '',
         productDiscountedPrice: 0,
         productActualPrice: 0,
-        productImages: []
+        productImages: [],
+        quantity: 0
       },
     };
   }

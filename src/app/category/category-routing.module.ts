@@ -10,7 +10,7 @@ const routes: Routes = [
     path: 'category/:name',
     component: CategoryListComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['Admin','User'] },
+    data: { roles: ['Admin'] },
   },
   {
     path: 'addCategory',

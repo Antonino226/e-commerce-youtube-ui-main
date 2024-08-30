@@ -31,7 +31,8 @@ export class AddNewProductComponent implements OnInit {
     productDiscountedPrice: 0,
     productActualPrice: 0,
     productImages: [],
-    category: null
+    category: null,
+    quantity: 0
   };
 
   category: Category;

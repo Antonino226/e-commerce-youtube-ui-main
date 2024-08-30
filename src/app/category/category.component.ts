@@ -85,7 +85,7 @@ export class CategoryComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleSelectAll(isSelected: boolean) {
+  toggleSelectAllCategory(isSelected: boolean) {
     if (isSelected) {
       this.selectedCategories = this.categories.map(category => category.categoryId);
     } else {

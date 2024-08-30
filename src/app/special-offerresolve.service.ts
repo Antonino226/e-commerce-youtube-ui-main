@@ -36,7 +36,8 @@ export class SpecialOfferresolveService implements Resolve<SpecialOffer> {
         productDescription: '',
         productDiscountedPrice: 0,
         productActualPrice: 0,
-        productImages: []
+        productImages: [],
+        quantity: 0
       },
     };
   }

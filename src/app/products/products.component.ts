@@ -7,6 +7,7 @@ import { ProductService } from '../_services/product.service';
 import { ImageProcessingService } from '../image-processing.service';
 import { UserAuthService } from '../_services/user-auth.service';
 import { forkJoin } from 'rxjs';
+import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-products',
@@ -20,6 +21,7 @@ export class ProductsComponent implements OnInit {
   selectedProducts: number[] = [];
   showLoadButton = false;
   loading: boolean = false;
+  productsInCart: Product[] = []; // Variabile per tenere traccia dei prodotti nel carrello
 
   // Cache per i prodotti caricati
   productCache: { [page: number]: Product[] } = {}; 
@@ -28,11 +30,13 @@ export class ProductsComponent implements OnInit {
     private productService: ProductService,
     private imageProcessingService: ImageProcessingService,
     private router: Router,
-    private userAuthService: UserAuthService
+    private userAuthService: UserAuthService,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
     this.getAllProducts();
+    this.loadCartProducts(); // Carica i prodotti nel carrello
   }
 
   // Cerca i prodotti in base a una parola chiave
@@ -116,6 +120,37 @@ export class ProductsComponent implements OnInit {
       });
     }
   }
+
+  // Funzione per caricare i prodotti nel carrello
+  loadCartProducts(): void {
+    this.cartService.getCart().subscribe(cart => {
+      if (cart) {
+        this.productsInCart = cart.products; // Recupera i prodotti nel carrello
+      } else {
+        this.productsInCart = []; // Se il carrello è vuoto o null, assegna un array vuoto
+      }
+    });
+  }
+
+  // Metodo per aggiungere i prodotti selezionati al carrello
+  buyProducts(): void {
+    if (this.selectedProducts.length > 0) {
+        const selectedProductDetails = this.productDetails.filter(product =>
+            this.selectedProducts.includes(product.productId)
+        );
+
+        // Crea un nuovo carrello se non esiste
+        this.cartService.createCart();
+
+        // Aggiungi i prodotti selezionati al carrello
+        selectedProductDetails.forEach(product => this.cartService.addToCart(product, 1));
+
+        // Naviga al carrello dopo aver aggiunto i prodotti
+        this.router.navigate(['/cart']);
+    } else {
+        alert('Please select at least one product to buy.');
+    }
+}
 
   // Aggiorna la cache dopo l'eliminazione di un prodotto specifico
   updateCacheAfterDelete(productId: number) {

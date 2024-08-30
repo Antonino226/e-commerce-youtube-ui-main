@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule, ExtraOptions } from '@angular/router';
 import { ForbiddenComponent } from './forbidden/forbidden.component';
 import { LoginComponent } from './login/login.component';
+import { CartComponent } from './cart/cart.component';
+import { OrderComponent } from './order/order.component';
+import { SharedModule } from './shared.module';
 
 const routes: Routes = [
   { path: '', loadChildren: () => import('./home/home.module').then(m => m.HomeModule) },
@@ -10,16 +13,14 @@ const routes: Routes = [
   { path: 'user', loadChildren: () => import('./user/user.module').then(m => m.UserModule) },
   { path: 'login', component: LoginComponent },
   { path: 'forbidden', component: ForbiddenComponent },
+  { path: 'order', component: OrderComponent }, // Rotta per l'ordine
   { path: '**', redirectTo: '' } // Forza un redirect a '/' per percorsi sconosciuti
 ];
 
-const routerOptions: ExtraOptions = {
-  scrollPositionRestoration: 'enabled',
-  anchorScrolling: 'enabled'
-};
-
 @NgModule({
-  imports: [RouterModule.forRoot(routes, routerOptions)],
+  imports: [RouterModule.forRoot(routes),
+    SharedModule
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

@@ -41,6 +41,7 @@ export class ProductResolveService implements Resolve<Product> {
       productActualPrice: 0,
       productImages: [],
       category: null, // Add this line to match the Product interface
+      quantity: 0,
     };
   }
 }

@@ -9,4 +9,5 @@ export interface Product {
     productActualPrice: number,
     productImages: FileHandle[]
     category?: Category;
+    quantity: number;
 }

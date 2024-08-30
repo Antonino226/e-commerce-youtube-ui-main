@@ -15,3 +15,35 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     transform: translate(-50%, -50%);
     z-index: 10;
   }
+
+  @media (max-width: 768px) {
+    .location iframe {
+        height: 300px; /* Riduci l'altezza per schermi piccoli */
+    }
+
+    .custom-home .content {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.5rem; /* Riduci la dimensione del titolo */
+    }
+
+    .location div {
+        font-size: 1rem; /* Adatta la dimensione del testo */
+    }
+}
+
+@media (max-width: 480px) {
+    .location iframe {
+        height: 200px; /* Altezza ancora più ridotta per schermi molto piccoli */
+    }
+
+    h1 {
+        font-size: 1.2rem;
+    }
+}
+
+mat-icon{
+    margin: 0px;
+}

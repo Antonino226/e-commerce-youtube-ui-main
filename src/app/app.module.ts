@@ -28,6 +28,7 @@ import { SpecialOfferModule } from './special-offer/special-offer.module';
 import { UserModule } from './user/user.module';
 import { HeaderComponent } from './header/header.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CartService } from './cart.service';
 
 
 @NgModule({
@@ -59,6 +60,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     UserService,
     CategoryService,
+    CartService,
     ProductService,
     UserAuthService,
     BuyProductResolverService,

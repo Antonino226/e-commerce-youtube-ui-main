@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OrderDetails } from '../_model/order-details.model';
-import { MyOrderDetails } from '../_model/order.model';
+import { Order } from '../_model/order.model';
 import { Product } from '../_model/product.model';
 
 @Injectable({
@@ -21,12 +21,12 @@ export class ProductService {
     return this.httpClient.get(`${this.baseUrl}/markOrderAsDelivered/${orderId}`);
   }
 
-  public getAllOrderDetailsForAdmin(status: string): Observable<MyOrderDetails[]> {
-    return this.httpClient.get<MyOrderDetails[]>(`${this.baseUrl}/getAllOrderDetails/${status}`);
+  public getAllOrderDetailsForAdmin(status: string): Observable<Order[]> {
+    return this.httpClient.get<Order[]>(`${this.baseUrl}/getAllOrderDetails/${status}`);
   }
 
-  public getMyOrders(): Observable<MyOrderDetails[]> {
-    return this.httpClient.get<MyOrderDetails[]>(`${this.baseUrl}/getOrderDetails`);
+  public getMyOrders(): Observable<Order[]> {
+    return this.httpClient.get<Order[]>(`${this.baseUrl}/getOrderDetails`);
   }
 
   public deleteCartItem(cartId: number): Observable<any> {

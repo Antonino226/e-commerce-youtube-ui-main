@@ -1,0 +1,35 @@
+<div class="order-container" *ngIf="order">
+    <h2>Order Summary</h2>
+  
+    <div class="order-details">
+      <p><strong>Name:</strong> {{ order.orderFullName }}</p>
+      <p><strong>Address:</strong> {{ order.orderFullAddress }}</p>
+      <p><strong>Contact Number:</strong> {{ order.orderContactNumber }}</p>
+      <p><strong>Alternate Contact Number:</strong> {{ order.orderAlternateContactNumber }}</p>
+      <p><strong>Order Status:</strong> {{ order.orderStatus }}</p>
+      <p><strong>Order Amount:</strong> Rs. {{ order.orderAmount }}</p>
+      <p><strong>Payment Method:</strong> {{ order.paymentMethod || 'Not specified' }}</p>
+      <p><strong>Order Date:</strong> {{ order.orderDate | date }}</p>
+    </div>
+  
+    <h3>Products in Your Order</h3>
+    <div class="product-list">
+      <div class="product-item" *ngFor="let product of order.products">
+        <img [src]="product.productImages[0]?.url" alt="{{ product.productName }}">
+        <div>
+          <h4>{{ product.productName }}</h4>
+          <p><strong>Price:</strong> Rs. {{ product.productDiscountedPrice }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="order-actions">
+      <button class="btn btn-success" (click)="confirmOrder()">Confirm Order</button>
+      <button class="btn btn-danger" (click)="cancelOrder()">Cancel Order</button>
+    </div>
+  </div>
+  
+  <div *ngIf="!order">
+    <p>No order details available.</p>
+  </div>
+  

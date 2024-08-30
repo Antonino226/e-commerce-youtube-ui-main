@@ -1,0 +1,35 @@
+.order-container {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .order-details p {
+    margin: 5px 0;
+  }
+  
+  .product-list {
+    margin-top: 20px;
+  }
+  
+  .product-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .product-item img {
+    width: 80px;
+    height: 80px;
+    margin-right: 15px;
+  }
+  
+  .order-actions {
+    margin-top: 20px;
+  }
+  
+  .order-actions .btn {
+    margin-right: 10px;
+  }

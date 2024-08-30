@@ -12,13 +12,13 @@
 
   <!-- Contenitore delle azioni (solo per amministratori) -->
   <div class="actions-container">
-    <div class="select-all-container" *ngIf="isAdmin()">
+    <div class="select-all-container">
       <input type="checkbox" id="selectAll" (change)="toggleSelectAll($event.target.checked)">
       <label for="selectAll">Select All</label>
     </div>
     <button 
       type="button" 
-      *ngIf="selectedProducts.length > 0 && isAdmin()" 
+      *ngIf="selectedProducts.length > 0 || isAdmin()" 
       class="btn btn-danger" 
       (click)="deleteSelectedProducts()">
       Delete Selected
@@ -32,15 +32,15 @@
       (click)="previousPage()" 
       [disabled]="pageNumber === 0 || loading" 
       class="btn btn-primary">
-      &larr; Previous
+      &larr;
     </button>
-    <span>Page: {{ pageNumber + 1 }}</span>
+    <span style="margin: 10px;">Page: {{ pageNumber + 1 }}</span>
     <button 
       type="button" 
       (click)="nextPage()" 
       [disabled]="!showLoadButton || loading"
       class="btn btn-primary">
-      Next &rarr;
+      &rarr;
     </button>
   </div>
 
@@ -67,7 +67,6 @@
         <div class="card-actions">
           <button type="button" (click)="showProductDetails(p.productId)">View Details</button>
           <input 
-            *ngIf="isAdmin()" 
             type="checkbox" 
             [checked]="isProductSelected(p.productId)" 
             (change)="toggleProductSelection(p.productId, $event.target.checked)">

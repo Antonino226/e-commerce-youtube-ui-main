@@ -1,50 +1,82 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { ProductService } from '../_services/product.service';
+import { Cart } from '../_model/cart.model';
+import { CartService } from '../cart.service';
+import { UserAuthService } from '../_services/user-auth.service';
+import { Subscription } from 'rxjs';
+import { Product } from '../_model/product.model';
+import { map, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { ImageProcessingService } from '../image-processing.service';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.css']
+  styleUrls: ['./cart.component.scss']
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
+  cart: Cart | null = null;
+  productsInCart: Product[] = [];
+  loading: boolean = true;
+  errorMessage: string = '';
+  private cartSubscription: Subscription | null = null;
 
-  displayedColumns: string[] = ['Name', 'Description', 'Price', 'Discounted Price', 'Action'];
-
-  cartDetails: any[] = [];
-
-  constructor(private productService: ProductService,
-    private router: Router) { }
+  constructor(
+    private cartService: CartService,
+    private router: Router,
+    private authService: UserAuthService,
+    private imageProcessingService: ImageProcessingService
+  ) {}
 
   ngOnInit(): void {
-    this.getCartDetails();
+    this.cartSubscription = this.cartService.getCartObservable()
+      .pipe(
+        map(cart => {
+          if (cart && cart.products) {
+            // Applica l'elaborazione delle immagini a ciascun prodotto nel carrello
+            cart.products = cart.products.map(product => this.imageProcessingService.createImagesProduct(product));
+          }
+          return cart;
+        }),
+        catchError(error => {
+          this.errorMessage = 'Error loading cart. Please try again later.';
+          this.loading = false;
+          return of(null);  // Return a null cart on error
+        })
+      )
+      .subscribe(cart => {
+        this.cart = cart || null;
+        this.productsInCart = cart?.products || [];
+        this.loading = false;
+      });
   }
 
-  delete(cartId) {
-    this.productService.deleteCartItem(cartId).subscribe(
-      (resp) => {
-        this.getCartDetails();
-      }, (err) => {
-        
-      }
-    );
+  ngOnDestroy(): void {
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
+    }
   }
 
-  getCartDetails() {
-    this.productService.getCartDetails().subscribe(
-      (response:any[]) => {
-        this.cartDetails = response;
-      },
-      (error) => {
-        
-      }
-    );
+  updateQuantity(productId: number, quantity: number): void {
+    this.cartService.updateQuantity(productId, quantity);
+  }
+  
+  removeFromCart(productId: number): void {
+    this.cartService.removeFromCart(productId);
   }
 
-  checkout() {
-    
-    this.router.navigate(['/buyProduct', {
-      isSingleProductCheckout: false, id: 0
-    }]);
+  proceedToCheckout(): void {
+    if (!this.authService.isLoggedIn()) {
+      alert('Please log in to proceed with checkout.');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    if (!this.cart || this.cart.products.length === 0) {
+      alert('Your cart is empty.');
+      return;
+    }
+
+    this.router.navigate(['/checkout']);
   }
 }

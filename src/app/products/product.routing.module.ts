@@ -10,7 +10,7 @@ import { BuyProductResolverService } from '../buy-product-resolver.service';
 import { AuthGuard } from '../_auth/auth.guard';
 
 const routes: Routes = [
-  { path: 'products', component: ProductsComponent, canActivate: [AuthGuard]},  
+  { path: 'products', component: ProductsComponent, canActivate: [AuthGuard], data: { roles: ['Admin', 'User'] }},  
   { path: 'addNewProduct', component: AddNewProductComponent, canActivate: [AuthGuard], data: { roles: ['Admin'] }, resolve: { product: ProductResolveService } },
   { path: 'productViewDetails', component: ProductViewDetailsComponent, resolve: { product: ProductResolveService } },
   { path: 'buyProduct', component: BuyProductComponent, canActivate: [AuthGuard], data: { roles: ['User'] }, resolve: { productDetails: BuyProductResolverService } }

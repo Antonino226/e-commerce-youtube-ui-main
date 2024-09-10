@@ -15,7 +15,8 @@ export class HeaderComponent implements OnInit {
 
   categories: Category[] = [];
   category: Category;
-  
+  user: any = null; // Per contenere i dati dell'utente
+
   constructor(
     private userAuthService: UserAuthService,
     private router: Router,
@@ -24,6 +25,7 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.user = this.userAuthService.getUser();
     this.loadCategories();
   }
 

@@ -1,42 +1,43 @@
-<!-- cart.component.html -->
-<div *ngIf="loading" class="spinner-container">
-  <mat-spinner></mat-spinner> <!-- Spinner Material Design -->
-</div>
-
-<div *ngIf="errorMessage && !loading" class="error-message">
-  <p>{{ errorMessage }}</p>
-</div>
-
-<div style="margin: 10px;" *ngIf="!loading && cart && !errorMessage">
-  <h1>Your Cart</h1>
-
-  <div *ngIf="productsInCart.length === 0">
-    <p>Your cart is empty.</p>
+<main>
+  <div *ngIf="loading" class="spinner-container">
+    <mat-spinner></mat-spinner> <!-- Spinner Material Design -->
   </div>
 
-  <div *ngIf="productsInCart.length > 0" class="grid-container">
-    <div class="card" *ngFor="let item of productsInCart">
-      <div class="card-header">
-        <img *ngIf="item.productImages && item.productImages.length > 0" [src]="item.productImages[0].url" alt="{{ item.productName }}" class="product-image"/>
-      </div>
-      <div class="card-container">
-        <h2 class="card-title">{{ item.productName }}</h2>
-        <p class="card-subtitle">
-          <b>Price: {{ item.productDiscountedPrice | currency }}</b>
-        </p>
-        <div class="card-content">
-          <p class="product-description">{{ item.productDescription }}</p>
-          <p>Quantity: {{ item.quantity }}</p>
-        </div>
-        <div class="card-actions">
-          <button type="button" (click)="removeFromCart(item.productId)">Remove</button>
-        </div>
-      </div>
-    </div>
+  <div *ngIf="errorMessage && !loading" class="error-message">
+    <p>{{ errorMessage }}</p>
   </div>
 
   <div class="cart-summary">
     <h3>Total Price: {{ cart.totalPrice | currency }}</h3>
     <button type="button" class="btn btn-primary" (click)="proceedToCheckout()">Proceed to Checkout</button>
   </div>
-</div>
+
+  <div style="margin: 10px;" *ngIf="!loading && cart && !errorMessage">
+    <h1>Your Cart</h1>
+
+    <div *ngIf="productsInCart.length === 0">
+      <p>Your cart is empty.</p>
+    </div>
+
+    <div *ngIf="productsInCart.length > 0" class="grid-container">
+      <div class="card" *ngFor="let item of productsInCart">
+        <div class="card-header">
+          <img *ngIf="item.productImages && item.productImages.length > 0" [src]="item.productImages[0].url" alt="{{ item.productName }}" class="product-image"/>
+        </div>
+        <div class="card-container">
+          <h2 class="card-title">{{ item.productName }}</h2>
+          <p class="card-subtitle">
+            <b>Price: {{ item.productDiscountedPrice | currency }}</b>
+          </p>
+          <div class="card-content">
+            <p class="product-description">{{ item.productDescription }}</p>
+            <p>Quantity: {{ item.quantity }}</p>
+          </div>
+          <div class="card-actions">
+            <button type="button" (click)="removeFromCart(item.productId)">Remove</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

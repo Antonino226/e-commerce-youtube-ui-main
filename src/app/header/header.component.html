@@ -9,6 +9,11 @@
     <span class="space-buttons"></span>
 
     <div style="display: flex;gap: 5px;">
+
+      <button mat-raised-button color="primary" [routerLink]="['/profile/', user?.userName]">
+        Profile
+      </button>      
+
       <mat-menu #menu="matMenu">
         <button mat-menu-item color="primary" routerLink="/">Home</button>
         <mat-divider></mat-divider>
@@ -18,7 +23,7 @@
         <button mat-menu-item color="primary" routerLink="/cart">Cart</button>
         <button mat-menu-item color="primary" routerLink="/myOrders">My Orders</button>
         <mat-divider></mat-divider>
-        <button *ngIf="!isAdmin()" mat-menu-item color="primary" (click)="navigateTo('location')">Location</button>
+        <button mat-menu-item color="primary" routerLink="/location">Location</button>
       </mat-menu>
       <button mat-raised-button [matMenuTriggerFor]="menu">Menu</button>
 

@@ -1,0 +1,17 @@
+<mat-card *ngIf="user">
+    <mat-card-header>
+      <mat-card-title>Profile</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p><strong>Username:</strong> {{ user.userName }}</p>
+      <p><strong>First Name:</strong> {{ user.userFirstName }}</p>
+      <p><strong>Last Name:</strong> {{ user.userLastName }}</p>
+    </mat-card-content>
+  </mat-card>
+  
+  <mat-card *ngIf="!user">
+    <mat-card-content>
+      <p>No user data available.</p>
+    </mat-card-content>
+  </mat-card>
+  

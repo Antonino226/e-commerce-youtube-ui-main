@@ -9,6 +9,7 @@ export class UserService {
   PATH_OF_API = 'http://localhost:9090';
 
   requestHeader = new HttpHeaders({ 'No-Auth': 'True' });
+
   constructor(
     private httpclient: HttpClient,
     private userAuthService: UserAuthService
@@ -30,7 +31,6 @@ export class UserService {
     });
   }
 
-
   public forAdmin() {
     return this.httpclient.get(this.PATH_OF_API + '/forAdmin', {
       responseType: 'text',
@@ -46,12 +46,15 @@ export class UserService {
         for (let j = 0; j < allowedRoles.length; j++) {
           if (userRoles[i].roleName === allowedRoles[j]) {
             isMatch = true;
-            return isMatch;
-          } else {
-            return isMatch;
+            break; // Esce dal ciclo interno quando c'è una corrispondenza
           }
+        }
+        if (isMatch) {
+          break; // Esce dal ciclo esterno se è stata trovata una corrispondenza
         }
       }
     }
+
+    return isMatch;
   }
 }

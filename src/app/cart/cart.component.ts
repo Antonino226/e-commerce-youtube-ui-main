@@ -1,5 +1,8 @@
+// cart.component.ts
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Cart } from '../_model/cart.model';
 import { CartService } from '../cart.service';
 import { UserAuthService } from '../_services/user-auth.service';
@@ -25,7 +28,8 @@ export class CartComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private router: Router,
     private authService: UserAuthService,
-    private imageProcessingService: ImageProcessingService
+    private imageProcessingService: ImageProcessingService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -33,7 +37,6 @@ export class CartComponent implements OnInit, OnDestroy {
       .pipe(
         map(cart => {
           if (cart && cart.products) {
-            // Applica l'elaborazione delle immagini a ciascun prodotto nel carrello
             cart.products = cart.products.map(product => this.imageProcessingService.createImagesProduct(product));
           }
           return cart;
@@ -41,7 +44,8 @@ export class CartComponent implements OnInit, OnDestroy {
         catchError(error => {
           this.errorMessage = 'Error loading cart. Please try again later.';
           this.loading = false;
-          return of(null);  // Return a null cart on error
+          this.snackBar.open('Error loading cart. Please try again later.', 'Close', { duration: 3000 });
+          return of(null); 
         })
       )
       .subscribe(cart => {
@@ -52,31 +56,24 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.cartSubscription) {
-      this.cartSubscription.unsubscribe();
-    }
-  }
-
-  updateQuantity(productId: number, quantity: number): void {
-    this.cartService.updateQuantity(productId, quantity);
-  }
-  
-  removeFromCart(productId: number): void {
-    this.cartService.removeFromCart(productId);
   }
 
   proceedToCheckout(): void {
     if (!this.authService.isLoggedIn()) {
-      alert('Please log in to proceed with checkout.');
+      this.snackBar.open('Please log in to proceed with checkout.', 'Close', { duration: 3000 });
       this.router.navigate(['/login']);
       return;
     }
 
     if (!this.cart || this.cart.products.length === 0) {
-      alert('Your cart is empty.');
+      this.snackBar.open('Your cart is empty.', 'Close', { duration: 3000 });
       return;
     }
 
+    // Memorizza i dati di checkout nel CartService
+    this.cartService.setCheckoutData(this.productsInCart, this.cart.totalPrice);
+    
+    // Naviga alla pagina di checkout
     this.router.navigate(['/checkout']);
   }
 }

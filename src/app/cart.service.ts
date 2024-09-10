@@ -133,4 +133,16 @@ export class CartService {
   getCartObservable(): Observable<Cart | null> {
     return this.cartSubject.asObservable();
   }
+
+  private checkoutDataSubject = new BehaviorSubject<{ products: Product[], totalAmount: number } | null>(null);
+
+  // Memorizza i dati di checkout
+  setCheckoutData(products: Product[], totalAmount: number): void {
+    this.checkoutDataSubject.next({ products, totalAmount });
+  }
+
+  // Recupera i dati di checkout
+  getCheckoutData(): Observable<{ products: Product[], totalAmount: number } | null> {
+    return this.checkoutDataSubject.asObservable();
+  }
 }

@@ -11,6 +11,10 @@ import { LocationComponent } from '../location/location.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CategoryModule } from '../category/category.module';
 import { CartComponent } from '../cart/cart.component';
+import { CheckoutComponent } from '../checkout/checkout.component';
+import { NgxPayPalModule } from 'ngx-paypal';
+import { SharedModule } from '../shared.module';
+import { ProfileComponent } from '../profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -18,11 +22,15 @@ import { CartComponent } from '../cart/cart.component';
     CategoryComponent,
     VideoComponent,
     LocationComponent,
-    CartComponent
+    CartComponent,
+    CheckoutComponent,
+    ProfileComponent
   ],
   imports: [
     CommonModule,
     HomeRoutingModule,
+    NgxPayPalModule,
+    SharedModule,
     ProductModule,
     CategoryModule,
     MatProgressSpinnerModule

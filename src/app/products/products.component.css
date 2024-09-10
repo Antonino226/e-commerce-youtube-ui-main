@@ -160,3 +160,8 @@ main{
     align-items: center;
     margin:10px
 }
+
+.text-danger {
+    color: red;
+    font-size: 0.875em;
+  }

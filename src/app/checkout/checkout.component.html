@@ -1,0 +1,131 @@
+<div class="checkout-container" style="margin:15px">
+  <h2>Checkout</h2>
+
+  <div *ngIf="products.length > 0; else emptyCart">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products">
+          <td>{{ product.productName }}</td>
+          <td>{{ product.quantity }}</td>
+          <td>{{ product.productDiscountedPrice | currency }}</td>
+          <td>{{ (product.productDiscountedPrice * product.quantity) | currency }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="total-amount">
+      <h3>Total: {{ totalAmount | currency }}</h3>
+    </div>
+
+    <h3>Shipping Information</h3>
+    <form [formGroup]="shippingForm" (ngSubmit)="confirmPurchase()">
+      <div class="form-group">
+        <label for="recipientName">Nome del destinatario:</label>
+        <input id="recipientName" formControlName="recipientName" class="form-control" required>
+        <div *ngIf="shippingForm.get('recipientName')?.touched && shippingForm.get('recipientName')?.invalid" class="text-danger">
+          <small *ngIf="shippingForm.get('recipientName')?.errors?.['required']">Il nome del destinatario è obbligatorio.</small>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="address">Indirizzo:</label>
+        <input id="address" formControlName="address" class="form-control" required>
+        <div *ngIf="shippingForm.get('address')?.touched && shippingForm.get('address')?.invalid" class="text-danger">
+          <small *ngIf="shippingForm.get('address')?.errors?.['required']">L'indirizzo è obbligatorio.</small>
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label for="city">Città:</label>
+        <input id="city" formControlName="city" class="form-control" required>
+        <div *ngIf="shippingForm.get('city')?.touched && shippingForm.get('city')?.invalid" class="text-danger">
+          <small *ngIf="shippingForm.get('city')?.errors?.['required']">La città è obbligatoria.</small>
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label for="postalCode">Codice postale:</label>
+        <input id="postalCode" formControlName="postalCode" class="form-control" required>
+        <div *ngIf="shippingForm.get('postalCode')?.touched && shippingForm.get('postalCode')?.invalid" class="text-danger">
+          <small *ngIf="shippingForm.get('postalCode')?.errors?.['required']">Il codice postale è obbligatorio.</small>
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label for="country">Paese:</label>
+        <input id="country" formControlName="country" class="form-control" required>
+        <div *ngIf="shippingForm.get('country')?.touched && shippingForm.get('country')?.invalid" class="text-danger">
+          <small *ngIf="shippingForm.get('country')?.errors?.['required']">Il paese è obbligatorio.</small>
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label for="phone">Numero di telefono:</label>
+        <input id="phone" formControlName="phone" class="form-control" required>
+        <div *ngIf="shippingForm.get('phone')?.touched && shippingForm.get('phone')?.invalid" class="text-danger">
+          <small *ngIf="shippingForm.get('phone')?.errors?.['required']">Il numero di telefono è obbligatorio.</small>
+          <small *ngIf="shippingForm.get('phone')?.errors?.['pattern']">Inserisci un numero di telefono valido.</small>
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input id="email" formControlName="email" type="email" class="form-control" required>
+        <div *ngIf="shippingForm.get('email')?.touched && shippingForm.get('email')?.invalid" class="text-danger">
+          <small *ngIf="shippingForm.get('email')?.errors?.['required']">L'email è obbligatoria.</small>
+          <small *ngIf="shippingForm.get('email')?.errors?.['email']">Inserisci un'email valida.</small>
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label for="weight">Peso del pacco (kg):</label>
+        <input id="weight" formControlName="weight" type="number" step="0.01" class="form-control" required>
+        <div *ngIf="shippingForm.get('weight')?.touched && shippingForm.get('weight')?.invalid" class="text-danger">
+          <small *ngIf="shippingForm.get('weight')?.errors?.['required']">Il peso è obbligatorio.</small>
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label for="length">Lunghezza (cm):</label>
+        <input id="length" formControlName="length" type="number" step="0.1" class="form-control" required>
+        <div *ngIf="shippingForm.get('length')?.touched && shippingForm.get('length')?.invalid" class="text-danger">
+          <small *ngIf="shippingForm.get('length')?.errors?.['required']">La lunghezza è obbligatoria.</small>
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label for="width">Larghezza (cm):</label>
+        <input id="width" formControlName="width" type="number" step="0.1" class="form-control" required>
+        <div *ngIf="shippingForm.get('width')?.touched && shippingForm.get('width')?.invalid" class="text-danger">
+          <small *ngIf="shippingForm.get('width')?.errors?.['required']">La larghezza è obbligatoria.</small>
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label for="height">Altezza (cm):</label>
+        <input id="height" formControlName="height" type="number" step="0.1" class="form-control" required>
+        <div *ngIf="shippingForm.get('height')?.touched && shippingForm.get('height')?.invalid" class="text-danger">
+          <small *ngIf="shippingForm.get('height')?.errors?.['required']">L'altezza è obbligatoria.</small>
+        </div>
+      </div>
+    
+      <button type="submit" class="btn btn-primary">Salva</button>
+    </form>
+    
+
+    <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+
+  </div>
+
+  <ng-template #emptyCart>
+    <p>Your cart is empty.</p>
+  </ng-template>
+</div>

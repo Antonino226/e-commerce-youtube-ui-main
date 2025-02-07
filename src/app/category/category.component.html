@@ -1,5 +1,8 @@
-<div class="category-container">
-  <div class="category-title">Categories</div>
+<main>
+
+  <div class="card-title">
+    <h1>Categorie</h1>
+  </div>
 
   <div class="actions-container" *ngIf="isAdmin()">
     <div class="select-all-container">
@@ -9,7 +12,7 @@
     <button 
     type="button" 
     *ngIf="selectedCategories.length > 0" 
-    class="btn btn-danger" 
+    class="btn btn-danger button-admin"
     (click)="deleteSelectedCategories()">
       Delete Selected
     </button>
@@ -32,4 +35,4 @@
       </div>
     </div>
   </div>
-</div>
+</main>

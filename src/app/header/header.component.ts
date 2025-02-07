@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { UserAuthService } from '../_services/user-auth.service';
 import { UserService } from '../_services/user.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -16,6 +16,7 @@ export class HeaderComponent implements OnInit {
   categories: Category[] = [];
   category: Category;
   user: any = null; // Per contenere i dati dell'utente
+  currentPage: string;
 
   constructor(
     private userAuthService: UserAuthService,
@@ -27,6 +28,13 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.user = this.userAuthService.getUser();
     this.loadCategories();
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        // Imposta il nome della pagina in base alla rotta corrente
+        this.setPageTitle(event.urlAfterRedirects);
+      }
+    });
   }
 
   loadCategories(): void {
@@ -38,6 +46,32 @@ export class HeaderComponent implements OnInit {
         console.error('Errore nel recupero delle categorie', error);
       }
     );
+  }
+
+  setPageTitle(url: string): void {
+    if (url.includes('/profile')) {
+      this.currentPage = 'Profile';
+    } else if (url.includes('/products')) {
+      this.currentPage = 'All Products';
+    } else if (url.includes('/category')) {
+      this.currentPage = 'Categories';
+    } else if (url.includes('/cart')) {
+      this.currentPage = 'Cart';
+    } else if (url.includes('/myOrders')) {
+      this.currentPage = 'My Orders';
+    } else if (url.includes('/location')) {
+      this.currentPage = 'Location';
+    } else if (url.includes('/addNewProduct')) {
+      this.currentPage = 'Add New Product';
+    } else if (url.includes('/addCategory')) {
+      this.currentPage = 'Add New Category';
+    } else if (url.includes('/addSpecialoffer')) {
+      this.currentPage = 'Add Special Offer';
+    } else if (url.includes('/orderInformation')) {
+      this.currentPage = 'Order Information';
+    } else {
+      this.currentPage = 'Home'; // Imposta Home come default
+    }
   }
 
   public isLoggedIn() {

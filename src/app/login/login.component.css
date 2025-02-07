@@ -145,17 +145,12 @@ body {
 
 .card-actions button {
   padding: 10px;
-  background-color: #ff4081;
+  background-color: #179555;
   border: none;
   color: #fff;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
 }
-
-.card-actions button:hover {
-  background-color: #e53070;
-}
-
 
 .load-more-container {
   text-align: center;

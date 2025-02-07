@@ -12,6 +12,24 @@
     <div>
       <h2>{{ currentOffer.offerName }}</h2>
       <h1>{{ currentOffer.offerDescription }}</h1>
+      <p><strong>Prodotto: </strong>{{ currentOffer.product.productName }}</p>
+      <p><strong>Descrizione prodotto: </strong>{{ currentOffer.product.productDescription }}</p>
+      <p><strong>Prezzo: </strong>{{ currentOffer.product.productPrice | currency }}</p>
     </div>
+  </div>
+
+  <!-- Carosello delle offerte -->
+  <div class="cards-container">
+    <button class="carousel-button carousel-button-left" (click)="prevOffer()">&#10094;</button>
+
+    <div class="card" *ngFor="let offer of specialOffers; let i = index" [ngClass]="{'active': i === currentOfferIndex}">
+      <h3>{{ offer.offerName }}</h3>
+      <p>{{ offer.offerDescription }}</p>
+      <p><strong>Prodotto: </strong>{{ offer.product.productName }}</p>
+      <p><strong>Prezzo: </strong>{{ offer.product.productPrice | currency }}</p>
+      <button (click)="onCardClick(offer)">Scopri di più</button>
+    </div>
+
+    <button class="carousel-button carousel-button-right" (click)="nextOffer()">&#10095;</button>
   </div>
 </div>

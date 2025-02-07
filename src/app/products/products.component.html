@@ -1,5 +1,9 @@
 <main>
-  <!-- Barra di ricerca -->
+
+  <div class="card-title">
+    <h1>Prodotti</h1>
+  </div>
+
   <div class="search-container">
     <label for="searchKey">Search any product</label>
     <input 
@@ -19,7 +23,7 @@
     <button 
       type="button" 
       *ngIf="selectedProducts.length > 0 && isAdmin()"
-      class="btn btn-danger" 
+      class="btn btn-danger button-admin" 
       (click)="deleteSelectedProducts()">
       Delete Selected
     </button>

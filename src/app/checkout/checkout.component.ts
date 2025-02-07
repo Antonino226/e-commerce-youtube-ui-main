@@ -52,7 +52,6 @@ export class CheckoutComponent implements OnInit {
     });
 
 
-    console.log(this.products);
     this.initConfig();
   }
 
@@ -180,17 +179,32 @@ export class CheckoutComponent implements OnInit {
       async: false
     };
   
-    this.shippingService.createShipment(shipmentData).subscribe(response => {
+    this.createAndProcessShipment(shipmentData)
+  }
+
+  async createAndProcessShipment(shipmentData: any) {
+    try {
+      // Aspetta che la spedizione venga creata
+      const response = await this.shippingService.createShipment(shipmentData);
+      
+      // Estrai l'ID della transazione dalla risposta
       const transactionId = response.transactions[0].object_id;
+      
+      // Genera l'etichetta per la spedizione
       this.generateLabel(transactionId);
+  
+      // Log della spedizione avvenuta con successo
       console.log('Spedizione creata con successo', response);
+  
+      // Mostra un messaggio di successo tramite Snackbar
       this.snackBar.open('Spedizione creata con successo!', 'Chiudi', { duration: 3000 });
-    },
-    error => {
+    } catch (error) {
+      // Gestione dell'errore se qualcosa va storto
       console.error('Errore nella creazione della spedizione', error);
       this.snackBar.open('Errore nella creazione della spedizione. Per favore, riprova.', 'Chiudi', { duration: 3000 });
-    });
+    }
   }
+  
   
 
   private generateLabel(transactionId: string): void {

@@ -15,6 +15,28 @@ export class VideoComponent implements OnInit {
     'assets/videos/background3.mp4',
   ];
 
+  specialOffersBuddy = [
+    {
+      offerId: 1,
+      offerName: 'Offerta Esclusiva 1',
+      offerDescription: 'Sconto del 50% su tutti i prodotti! Solo per oggi.',
+      creationDate: new Date(),      
+    },
+    {
+      offerId: 2,
+      offerName: 'Offerta Esclusiva 2',
+      offerDescription: 'Acquista uno, ricevi il secondo gratis! Non perdere questa occasione.',
+      creationDate: new Date(),
+    },
+    {
+      offerId: 3,
+      offerName: 'Offerta Esclusiva 3',
+      offerDescription: 'Spedizione gratuita su tutti gli ordini superiori a 100€.',
+      creationDate: new Date(),
+    }
+  ];
+
+
   specialOffers: SpecialOffer[] = [];
   currentOfferIndex = 0;
   offerDisplayDuration = 10000; // 10 seconds
@@ -73,6 +95,15 @@ export class VideoComponent implements OnInit {
 
   get currentOffer(): SpecialOffer {
     return this.specialOffers[this.currentOfferIndex];
+  }
+
+   // Funzione per navigare tra le carte del carosello
+   nextOffer() {
+    this.currentOfferIndex = (this.currentOfferIndex + 1) % this.specialOffers.length;
+  }
+
+  prevOffer() {
+    this.currentOfferIndex = (this.currentOfferIndex - 1 + this.specialOffers.length) % this.specialOffers.length;
   }
 
 }

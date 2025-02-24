@@ -43,30 +43,11 @@ export class CategoryComponent implements OnInit, OnDestroy {
     this.categoryService.getCategories().subscribe(
       (categories: Category[]) => {
         this.categories = categories;
-        this.initializeImageRotation(); // Inizializza la rotazione delle immagini dopo il caricamento delle categorie
       },
       (error: HttpErrorResponse) => {
         console.error('Errore nel recupero delle categorie', error);
       }
     );
-  }
-
-  private initializeImageRotation(): void {
-    this.categories.forEach(category => {
-      if (category.categoryImages && category.categoryImages.length > 0) {
-        this.currentImageIndexes[category.categoryId] = 0;
-        this.imageIntervals[category.categoryId] = window.setInterval(() => {
-          this.rotateImages(category.categoryId);
-        }, 5000); // Cambia immagine ogni 5 secondi
-      }
-    });
-  }
-
-  private rotateImages(categoryId: number): void {
-    const category = this.categories.find(cat => cat.categoryId === categoryId);
-    if (category && category.categoryImages && category.categoryImages.length > 0) {
-      this.currentImageIndexes[categoryId] = (this.currentImageIndexes[categoryId] + 1) % category.categoryImages.length;
-    }
   }
 
   getCurrentImage(category: Category): SafeUrl {

@@ -12,7 +12,7 @@ import { CategoryService } from '../_services/category.service';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-
+  
   categories: Category[] = [];
   category: Category;
   user: any = null; // Per contenere i dati dell'utente
@@ -35,17 +35,6 @@ export class HeaderComponent implements OnInit {
         this.setPageTitle(event.urlAfterRedirects);
       }
     });
-  }
-
-  loadCategories(): void {
-    this.categoryService.getCategories().subscribe(
-      (categories: Category[]) => {
-        this.categories = categories;
-      },
-      (error: HttpErrorResponse) => {
-        console.error('Errore nel recupero delle categorie', error);
-      }
-    );
   }
 
   setPageTitle(url: string): void {
@@ -72,6 +61,23 @@ export class HeaderComponent implements OnInit {
     } else {
       this.currentPage = 'Home'; // Imposta Home come default
     }
+  }
+
+  loadCategories(): void {
+    this.categoryService.getCategories().subscribe(
+      (categories: Category[]) => {
+        this.categories = categories;
+        console.log(this.categories)
+      },
+      (error: HttpErrorResponse) => {
+        console.error('Errore nel recupero delle categorie', error);
+      }
+    );
+  }
+
+  isActive(route: string): boolean {
+    const currentUrl = this.router.url.split('?')[0]; // Rimuove i query params per un confronto pulito
+    return currentUrl === route; // Confronto esatto dell'URL
   }
 
   public isLoggedIn() {

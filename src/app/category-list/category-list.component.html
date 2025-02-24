@@ -20,32 +20,34 @@
       type="button" 
       *ngIf="selectedProducts.length > 0 || isAdmin()" 
       class="btn btn-danger button-admin" 
-      (click)="deleteSelectedProducts()">
+      (click)="deleteSelectedProducts()"
+      [disabled]="loading">
       Delete Selected
     </button>
   </div>
 
-   <!-- Controlli di paginazione -->
-   <div class="pagination-container">
+  <!-- Controlli di paginazione -->
+  <div class="pagination-container">
     <button 
       type="button" 
       (click)="previousPage()" 
       [disabled]="pageNumber === 0 || loading" 
       class="btn btn-primary">
-      &larr;
+      ←
     </button>
     <span style="margin: 10px;">Page: {{ pageNumber + 1 }}</span>
     <button 
       type="button" 
       (click)="nextPage()" 
-      [disabled]="!showLoadButton || loading"
+      [disabled]="!showLoadButton || loading" 
       class="btn btn-primary">
-      &rarr;
+      →
     </button>
   </div>
 
+  <!-- Spinner centrale durante il caricamento -->
   <div class="spinner-container" *ngIf="loading">
-    <mat-spinner></mat-spinner>
+    <mat-spinner diameter="50"></mat-spinner>
   </div>
 
   <!-- Griglia dei prodotti -->
@@ -58,7 +60,7 @@
         <h2 class="card-title">{{ p.productName }}</h2>
         <p class="card-subtitle">
           <b>Rs. {{ p.productDiscountedPrice }}</b>
-          &nbsp; 
+           
           <b class="original-price">{{ p.productActualPrice }}</b>
         </p>
         <div class="card-content">

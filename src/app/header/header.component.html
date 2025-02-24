@@ -1,4 +1,4 @@
-<mat-toolbar class="header" color="primary">
+<mat-toolbar class="header" style="background-color: #333;">
   <span>
     <img src="assets/logos/logo-lateral.jpeg" alt="E-Commerce Logo" style="height: 50px;">
   </span>
@@ -10,12 +10,11 @@
   <ng-container *ngIf="isLoggedIn()">
     <span class="space-buttons"></span>
 
-    <div style="display: flex;gap: 5px;">
-
+    <div style="display: flex; gap: 5px;">
       <button mat-raised-button color="primary" [routerLink]="['/profile/', user?.userName]">
         Profile
-      </button>      
-
+      </button>
+      
       <mat-menu #menu="matMenu">
         <button mat-menu-item color="primary" routerLink="/">Home</button>
         <mat-divider></mat-divider>
@@ -39,9 +38,25 @@
         <button mat-raised-button [matMenuTriggerFor]="adminMenu">Admin</button>
       </ng-container>
 
-        <button (click)="logout()" mat-raised-button color="warn">
-          Logout
-        </button>
+      <button (click)="logout()" mat-raised-button color="warn">
+        Logout
+      </button>
     </div>
   </ng-container>
 </mat-toolbar>
+
+<mat-toolbar color="white" style="border-top: 1px solid #ccc;">
+  <span class="spacer"></span>
+
+  <button mat-button [routerLink]="['/']" [class.active]="isActive('/')">Home</button>
+
+  <ng-container *ngFor="let category of categories">
+    <button 
+      mat-button 
+      [routerLink]="['/category', category.categoryName]" 
+      [class.active]="isActive('/category/' + category.categoryName)">
+      {{ category.categoryName }}
+    </button>
+  </ng-container>
+</mat-toolbar>
+
